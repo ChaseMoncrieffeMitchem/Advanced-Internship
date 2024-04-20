@@ -4,35 +4,35 @@ export default function Numbers() {
   return (
     <>
       <section id="numbers">
-        <div class="container">
-          <div class="row">
-            <div class="section__title">Start growing with Summarist now</div>
-            <div class="numbers__wrapper">
-              <div class="numbers">
-                <div class="numbers__icon">
+        <div className="container">
+          <div className="row">
+            <div className="section__title">Start growing with Summarist now</div>
+            <div className="numbers__wrapper">
+              <div className="numbers">
+                <div className="numbers__icon">
                   {/* <BiCrown /> */}
                 </div>
-                <div class="numbers__title">3 Million</div>
-                <div class="numbers__sub--title">
+                <div className="numbers__title">3 Million</div>
+                <div className="numbers__sub--title">
                   Downloads on all platforms
                 </div>
               </div>
-              <div class="numbers">
-                <div class="numbers__icon numbers__star--icon">
+              <div className="numbers">
+                <div className="numbers__icon numbers__star--icon">
                   {/* <BsStarFill />
                   <BsStarHalf /> */}
                 </div>
-                <div class="numbers__title">4.5 Stars</div>
-                <div class="numbers__sub--title">
+                <div className="numbers__title">4.5 Stars</div>
+                <div className="numbers__sub--title">
                   Average ratings on iOS and Google Play
                 </div>
               </div>
-              <div class="numbers">
-                <div class="numbers__icon">
+              <div className="numbers">
+                <div className="numbers__icon">
                   {/* <RiLeafLine /> */}
                 </div>
-                <div class="numbers__title">97%</div>
-                <div class="numbers__sub--title">
+                <div className="numbers__title">97%</div>
+                <div className="numbers__sub--title">
                   Of Summarist members create a better reading habit
                 </div>
               </div>
