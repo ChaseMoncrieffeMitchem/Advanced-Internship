@@ -19,15 +19,16 @@ export default function SignupModal() {
       email,
       password
     )
+    dispatch(closeSignupModal())
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) return
       console.log(currentUser)
-      dispatch(setUser({
-        email: currentUser.email
-      }))
+      // dispatch(setUser({
+      //   email: currentUser.email
+      // }))
 
     })
 

@@ -1,19 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import { useSelector, useDispatch } from "react-redux";
 import { closeLoginModal, openLoginModal } from "@/redux/modalSlice";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase";
+import { doSignInWithEmailAndPassword } from "../../firebase/auth";
+import { useAuth } from "@/contexts/authContext";
 
 export default function LoginModal() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
 
-  function handleLogin() {
-    
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!isSignedIn) {
+  //     setIsSignedIn(true);
+  //     await doSignInWithEmailAndPassword(email, password).catch((err) => {
+  //       setIsSignedIn(false);
+  //       setErrorMessage("Email or Passowrd is Incorrect");
+  //     });
+  //   }
+  // };
+
+  async function handleSignIn() {
+    await signInWithEmailAndPassword(auth, email, password).catch((err) => { 
+      if (password.length < 6) {
+        setErrorMessage("Password is too short");
+      }
+      if (!password) {
+        setErrorMessage("Please input password")
+      }
+      setIsSignedIn(true);
+    });
+    dispatch(closeLoginModal())
   }
 
-  
+  useEffect(() => {
+    if (!isSignedIn) return;
+    if (isSignedIn) {
+      const subscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          // window.location = "https://summarist.vercel.app/for-you"
+          console.log("You're In");
+          dispatch(closeLoginModal())
+        }
+      });
+      return subscribe;
+    }
+  }, []);
+
   return (
     <>
+      {/* {!isSignedIn && (<Link href={"/home"} replace={true}/>)} */}
       <button
         onClick={() => dispatch(openLoginModal())}
         className="btn home__cta--btn"
@@ -33,17 +77,22 @@ export default function LoginModal() {
               placeholder="Email"
               className="h-10 mt-8 rounded-md bg-black border border-gray-600 text-white p-6"
               type={"email"}
+              onChange={(e) => setEmail(e.target.value)}
             ></input>
             <input
               placeholder="Password"
               className="h-10 mt-8 rounded-md bg-black border border-gray-600 text-white p-6"
               type={"password"}
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
             <button
               className="btn mt-8"
+              onClick={handleSignIn}
+              // onClick={onSubmit}
             >
               Login
             </button>
+            {errorMessage && <p className=" text-pink-900">{errorMessage}</p>}
           </div>
         </div>
       </Modal>

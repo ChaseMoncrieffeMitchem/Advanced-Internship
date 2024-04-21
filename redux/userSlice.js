@@ -1,3 +1,4 @@
+import { auth } from '@/firebase';
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -14,6 +15,7 @@ const userSlice = createSlice({
 
     signOutUser: (state) => {
         state.email = null
+        state = auth.signOut()
     }
   }
 });
