@@ -6,9 +6,11 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
 import { doSignInWithEmailAndPassword } from "../../firebase/auth";
 import { useAuth } from "@/contexts/authContext";
+import { setUser } from "@/redux/userSlice";
 
 export default function LoginModal() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
+  
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -29,25 +31,50 @@ export default function LoginModal() {
   // };
 
   async function handleSignIn() {
-    await signInWithEmailAndPassword(auth, email, password).catch((err) => { 
+    await signInWithEmailAndPassword(auth, email, password).then(data => {
+      if (!isSignedIn) {
+        const subscribe = onAuthStateChanged(auth, (currentUser) => {
+          if (currentUser) {
+            // window.location = "https://summarist.vercel.app/for-you"
+            // console.log("You're In");
+            dispatch(closeLoginModal())
+            dispatch(setUser(currentUser.email))
+            console.log(currentUser.email)
+          }
+          
+          
+        })
+      };
+        
+    }).catch((err) => {
+      if (err.code === "auth/invalid-email") {
+        setErrorMessage("Please enter valid email address")
+      }
+      if (err.code === "auth/invalid-credential") {
+        setErrorMessage( "Invalid Email and Password Combination")
+      }
       if (password.length < 6) {
         setErrorMessage("Password is too short");
       }
       if (!password) {
         setErrorMessage("Please input password")
       }
-      setIsSignedIn(true);
+      if (!email) {
+        setErrorMessage("Please input email")
+      }
     });
-    dispatch(closeLoginModal())
   }
 
+  const isLoggedIn = useSelector((state) => state.user.email)
+  console.log(isLoggedIn)
+
   useEffect(() => {
-    if (!isSignedIn) return;
-    if (isSignedIn) {
+    if (isSignedIn) return;
+    if (!isSignedIn) {
       const subscribe = onAuthStateChanged(auth, (currentUser) => {
         if (currentUser) {
           // window.location = "https://summarist.vercel.app/for-you"
-          console.log("You're In");
+          // console.log("You're In");
           dispatch(closeLoginModal())
         }
       });

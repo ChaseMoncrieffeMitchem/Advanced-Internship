@@ -12,14 +12,35 @@ export default function SignupModal() {
 
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+  const [errorMessage, setErrorMessage] = useState("")
 
   async function handleSignup() {
     const userCredentials = await createUserWithEmailAndPassword(
       auth,
       email,
       password
-    )
-    dispatch(closeSignupModal())
+    ).then(data => dispatch(closeSignupModal())).catch(err => {
+      console.log(err)
+      if (err.code === "auth/email-already-in-use") {
+        setErrorMessage("This email is already in use")
+      }
+      if (err.code === "auth/invalid-email") {
+        setErrorMessage("Please enter a valid email address")
+      }
+      if (err.code === "auth/invalid-credential") {
+        setErrorMessage( "Invalid Email and Password Combination")
+      }
+      if (password.length < 6) {
+        setErrorMessage("Password is too short");
+      }
+      if (!password) {
+        setErrorMessage("Please input password")
+      }
+      if (!email) {
+        setErrorMessage("Please input email")
+      }
+    })
+    
   }
 
   useEffect(() => {
@@ -61,6 +82,7 @@ export default function SignupModal() {
               onChange={e => setPassword(e.target.value)}
             ></input>
             <button onClick={handleSignup} className="btn mt-8">Sign up</button>
+            {errorMessage && <p className="text-pink-700">{errorMessage}</p>}
           </div>
         </div>
       </Modal>
