@@ -26,7 +26,7 @@ export default function LoginModal() {
     signInAnonymously(auth).then(() => {
     if (isSignedIn) return;
     if (!isSignedIn) {
-      window.location = "https://summarist.vercel.app/for-you";
+      window.location = "/foryou";
     }
   })
 }
