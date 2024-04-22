@@ -3,10 +3,9 @@ import Image from "next/image"
 import LoginModal from "./modals/LoginModal";
 import SignupModal from "./modals/SignupModal";
 import Logout from "./modals/Logout";
-import { useGetSuggestedBooksQuery } from "@/redux/bookSlice";
 
 export default function Landing() {
-  console.log(useGetSuggestedBooksQuery())
+
   return (
     <>
       <section id="landing">

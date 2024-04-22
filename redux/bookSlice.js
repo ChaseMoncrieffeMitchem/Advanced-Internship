@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // import { createSlice } from '@reduxjs/toolkit'
 
@@ -13,33 +13,38 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 //     averageRating: null,
 //     keyIdeas: null,
 //     type: null,
-//     status: null, 
+//     status: null,
 //     subscriptionRequired: null,
-//     summary: null, 
+//     summary: null,
 //     tags: null,
 //     bookDescription: null,
 //     authorDescription: null
 // }
 
 export const booksApi = createApi({
-    reducerPath: "booksApi",
-    baseQuery: fetchBaseQuery({
-        baseUrl: "https://us-central1-summaristt.cloudfunctions.net/getBooks?status="
+  reducerPath: "booksApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl:
+      "https://us-central1-summaristt.cloudfunctions.net",
+  }),
+  endpoints: (builder) => ({
+    getSelectedBooks: builder.query({
+      query: () => "/getBooks?status=selected",
     }),
-    endpoints: (builder) => (
-        // {getSelectedBooks: builder.query({
-        //     query: (() => "selected")
-        // })},
-        // {getRecommendedBooks: builder.query({
-        //     query: (() => "recommended")
-        // })},
-        {getSuggestedBooks: builder.query({
-            query: (() => "suggested")
-        })}
-    )
-})
+    getRecommendedBooks: builder.query({
+      query: () => "/getBooks?status=recommended",
+    }),
+    getSuggestedBooks: builder.query({
+      query: () => "/getBooks?status=suggested",
+    }),
+  }),
+});
 
-export const {useGetSuggestedBooksQuery} = booksApi
+export const {
+  useGetSelectedBooksQuery,
+  useGetRecommendedBooksQuery,
+  useGetSuggestedBooksQuery,
+} = booksApi;
 
 // export const {} = bookSlice.actions
 

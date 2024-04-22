@@ -7,7 +7,7 @@ export default configureStore({
   reducer: {
     modals: modalSlice,
     user: userSlice,
-    [booksApi.reducerPath]: booksApi.reducer,
+    [booksApi.reducerPath]: booksApi.reducer
   },
 
   middleware: (getDefaultMiddleware) =>
