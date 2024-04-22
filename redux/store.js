@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modalSlice from "./modalSlice";
 import userSlice from "./userSlice";
-import { booksApi } from "./bookSlice";
+import { booksApi } from "./bookApiSlice";
 
 export default configureStore({
   reducer: {

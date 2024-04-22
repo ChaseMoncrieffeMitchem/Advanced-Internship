@@ -1,10 +1,8 @@
 import SelectedBooks from '@/components/bookApis/SelectedBooks'
-import { useGetRecommendedBooksQuery, useGetSelectedBooksQuery, useGetSuggestedBooksQuery } from '@/redux/bookSlice'
 import React from 'react'
 
 export default function forYou() {
-  const {data} = useGetSelectedBooksQuery()
-  console.log(data)
+  
   
   return (
     <>
@@ -12,7 +10,9 @@ export default function forYou() {
     <div className='row'>
       <div className='container'>
         <div className='for-you__wrapper'>
-        <SelectedBooks data={data}/>
+        <SelectedBooks 
+        // data={data}
+        />
         </div>
       </div>
     </div>
