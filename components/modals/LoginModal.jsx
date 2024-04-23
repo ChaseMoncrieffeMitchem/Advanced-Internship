@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import { useSelector, useDispatch } from "react-redux";
-import { closeLoginModal, openLoginModal } from "@/redux/modalSlice";
+import { closeLoginModal, openLoginModal, openSignupModal } from "@/redux/modalSlice";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -115,6 +115,7 @@ export default function LoginModal() {
             >
               Login
             </button>
+            <button onClick={() => dispatch(openSignupModal()) && dispatch(closeLoginModal())}>Don't have an account?</button>
             {errorMessage && <p className=" text-pink-900">{errorMessage}</p>}
           </div>
         </div>

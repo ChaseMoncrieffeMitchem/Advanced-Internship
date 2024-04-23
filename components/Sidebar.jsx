@@ -1,7 +1,11 @@
 import React from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "@/redux/modalSlice";
 
 export default function Sidebar() {
+
+  const dispatch = useDispatch() 
   return (
     <>
       <div className="sidebar__overlay--hidden sidebar__overlay"></div>
@@ -60,7 +64,7 @@ export default function Sidebar() {
               <div className="sidebar__icon--wrapper">
                 <svg></svg>
               </div>
-              <div className="sidebar__link--text">Login</div>
+              <button onClick={() => dispatch(openLoginModal())} className="sidebar__link--text">Login</button>
             </div>
           </div>
         </div>

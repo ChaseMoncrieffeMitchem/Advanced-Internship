@@ -1,4 +1,4 @@
-import { closeSignupModal, openSignupModal } from "@/redux/modalSlice";
+import { closeSignupModal, openLoginModal, openSignupModal } from "@/redux/modalSlice";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "@mui/material/Modal";
@@ -82,6 +82,7 @@ export default function SignupModal() {
               onChange={e => setPassword(e.target.value)}
             ></input>
             <button onClick={handleSignup} className="btn mt-8">Sign up</button>
+            <button onClick={() => dispatch(openLoginModal()) && dispatch(closeSignupModal())}>Already have an account?</button>
             {errorMessage && <p className="text-pink-700">{errorMessage}</p>}
           </div>
         </div>

@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { openLoginModal } from "@/redux/modalSlice";
 import LoginModal from "@/components/modals/LoginModal";
+import SignupModal from "@/components/modals/SignupModal";
+import Sidebar from "@/components/Sidebar";
 
 export default function books() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen)
@@ -12,6 +14,8 @@ export default function books() {
   const router = useRouter();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [subscribed, setSubscribed] = useState(true)
+  const [loggedIn, setLoggedIn] = useState(true)
 
   const { id } = router.query;
 
@@ -23,13 +27,33 @@ export default function books() {
     setLoading(false);
   }
 
+  function goToSubscriptionPage() {
+    if (subscribed && books.subscriptionRequired) {
+      return window.location = "/choose-plan"
+    }
+  }
+
+  function goToPlayerIdPage() {
+    if (!books.subscriptionRequired || subscribed) {
+      return window.location = "/player/:id"
+    }
+  }
+
+  function saveBookToDetails() {
+    if(loggedIn) {
+      return console.log("Saving book to Details")
+    }
+  }
+
   useEffect(() => {
     fetchBooks();
   }, []);
 
   return (
     <>
-    <LoginModal open={isOpen}/>
+    <Sidebar />
+    <LoginModal close={!isOpen}/>
+    <SignupModal />
       <div className="row">
         <audio></audio>
         <div className="container">
@@ -75,7 +99,7 @@ export default function books() {
                   </div>
                 </div>
                 <div className="inner-book__read--btn-wrapper">
-                  <button onClick={() => dispatch(openLoginModal())} className="inner-book__read--btn">
+                  <button onClick={() => goToSubscriptionPage() || goToPlayerIdPage() || dispatch(openLoginModal())} className="inner-book__read--btn">
                     <div className="inner-book__read--icon">
                       <svg></svg>
                     </div>
@@ -92,16 +116,16 @@ export default function books() {
                   <div className="inner-book__bookmark--icon">
                     <svg></svg>
                   </div>
-                  <div className="inner-book__bookmark--text">
+                  <button onClick={() => dispatch(openLoginModal()) || saveBookToDetails()} className="inner-book__bookmark--text">
                     Add Title to My Library
-                  </div>
+                  </button>
                 </div>
                 <div className="inner-book__secondary--title">
                   What's it about?
                 </div>
                 <div className="inner-book__tags--wrapper">
-                  <div className="inner-book__tag">{books.tags[0]}</div>
-                  <div className="inner-book__tag">{books.tags[1]}</div>
+                  <div className="inner-book__tag">{loading ? <div>Loading...</div> : books.tags[0]}</div>
+                  <div className="inner-book__tag">{loading ? <div>Loading...</div> : books.tags[1]}</div>
                 </div>
                 <div className="inner-book__book--description">
                   {books.summary}
