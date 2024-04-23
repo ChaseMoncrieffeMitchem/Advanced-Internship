@@ -1,8 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+import { openLoginModal } from "@/redux/modalSlice";
+import LoginModal from "@/components/modals/LoginModal";
 
 export default function books() {
+  const isOpen = useSelector((state) => state.modals.loginModalOpen)
+  const dispatch = useDispatch()
+
   const router = useRouter();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +29,7 @@ export default function books() {
 
   return (
     <>
+    <LoginModal open={isOpen}/>
       <div className="row">
         <audio></audio>
         <div className="container">
@@ -68,13 +75,13 @@ export default function books() {
                   </div>
                 </div>
                 <div className="inner-book__read--btn-wrapper">
-                  <button className="inner-book__read--btn">
+                  <button onClick={() => dispatch(openLoginModal())} className="inner-book__read--btn">
                     <div className="inner-book__read--icon">
                       <svg></svg>
                     </div>
                     <div className="inner-book__read--text">Read</div>
                   </button>
-                  <button className="inner-book__read--btn">
+                  <button onClick={() => dispatch(openLoginModal())} className="inner-book__read--btn">
                     <div className="inner-book__read--icon">
                       <svg></svg>
                     </div>

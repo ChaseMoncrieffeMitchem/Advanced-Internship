@@ -928,6 +928,11 @@ button:disabled {
   display: flex;
 }
 
+.inner-book__read--icon svg {
+  height: 24px;
+  width: 24px;
+}
+
 .inner-book__bookmark {
   display: flex;
   align-items: center;
