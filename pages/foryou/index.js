@@ -1,4 +1,6 @@
+import RecommendedBooks from '@/components/bookApis/RecommendedBooks'
 import SelectedBooks from '@/components/bookApis/SelectedBooks'
+import SuggestedBooks from '@/components/bookApis/SuggestedBooks'
 import React from 'react'
 
 export default function forYou() {
@@ -10,9 +12,9 @@ export default function forYou() {
     <div className='row'>
       <div className='container'>
         <div className='for-you__wrapper'>
-        <SelectedBooks 
-        // data={data}
-        />
+        <SelectedBooks/>
+        <RecommendedBooks />
+        <SuggestedBooks />
         </div>
       </div>
     </div>
