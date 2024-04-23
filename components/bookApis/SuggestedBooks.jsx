@@ -31,7 +31,7 @@ export default function SuggestedBooks() {
           books.map((book, index) => (
             <Link
               className="for-you__recommended--books-link"
-              href="/foryou/book/5bxl50cz4bt"
+              href={"/foryou/book/" + book.id}
               key={index}
             >
               <div className="book__pill book__pill--subscription-required">{book.subscriptionRequired === true ? "Premium" : ""}</div>

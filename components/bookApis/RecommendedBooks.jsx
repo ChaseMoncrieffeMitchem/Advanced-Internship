@@ -13,6 +13,7 @@ export default function RecommendedBooks() {
     setBooks(data);
     setLoading(false);
     console.log(books);
+    
   }
 
   useEffect(() => {
@@ -30,8 +31,8 @@ export default function RecommendedBooks() {
           books.map((book, index) => (
             <Link
               className="for-you__recommended--books-link"
-              href="/foryou/book/5bxl50cz4bt"
-              key={index}
+              href={"/foryou/book/" + book.id}
+              key={index} 
             >
               <div className="book__pill book__pill--subscription-required">{book.subscriptionRequired === true ? "Premium" : ""}</div>
               <audio></audio>
