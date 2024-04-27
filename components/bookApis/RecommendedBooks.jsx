@@ -12,8 +12,6 @@ export default function RecommendedBooks() {
     );
     setBooks(data);
     setLoading(false);
-    console.log(books);
-    
   }
 
   useEffect(() => {
@@ -28,7 +26,7 @@ export default function RecommendedBooks() {
         {loading ? (
           <div>Loading...</div>
         ) : (
-          books.map((book, index) => (
+          books?.map((book, index) => (
             <Link
               className="for-you__recommended--books-link"
               href={"/foryou/book/" + book.id}

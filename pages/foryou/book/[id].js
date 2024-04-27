@@ -25,6 +25,7 @@ export default function books() {
     );
     setBooks(data);
     setLoading(false);
+    console.log(data)
   }
 
   function goToSubscriptionPage() {
@@ -35,7 +36,7 @@ export default function books() {
 
   function goToPlayerIdPage() {
     if (!books.subscriptionRequired || subscribed) {
-      return window.location = "/player/:id"
+      return window.location = "/player/" + id
     }
   }
 
@@ -47,12 +48,12 @@ export default function books() {
 
   useEffect(() => {
     fetchBooks();
-  }, []);
+  }, [books]);
 
   return (
     <>
     <Sidebar />
-    <LoginModal close={!isOpen}/>
+    <LoginModal/>
     <SignupModal />
       <div className="row">
         <audio></audio>
@@ -60,7 +61,7 @@ export default function books() {
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <div className="inner__wrapper">
+            <div className="inner__wrapper" books={books}>
               <div className="inner__book">
                 <div className="inner-book__title">{books.title}</div>
                 <div className="inner-book__author">{books.author}</div>
@@ -124,8 +125,10 @@ export default function books() {
                   What's it about?
                 </div>
                 <div className="inner-book__tags--wrapper">
-                  <div className="inner-book__tag">{loading ? <div>Loading...</div> : books.tags[0]}</div>
-                  <div className="inner-book__tag">{loading ? <div>Loading...</div> : books.tags[1]}</div>
+                  {books.tags?.map((tag, index) => (
+                  <div className="inner-book__tag" key={index}>{tag}</div>
+                ))}
+                
                 </div>
                 <div className="inner-book__book--description">
                   {books.summary}

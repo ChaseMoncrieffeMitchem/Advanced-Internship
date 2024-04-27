@@ -1,3 +1,4 @@
+import { AudioPlayer } from "@/components/AudioPlayer";
 import Sidebar from "@/components/Sidebar";
 import RecommendedBooks from "@/components/bookApis/RecommendedBooks";
 import SelectedBooks from "@/components/bookApis/SelectedBooks";
@@ -15,6 +16,7 @@ export default function forYou() {
               <SelectedBooks />
               <RecommendedBooks />
               <SuggestedBooks />
+              <AudioPlayer />
             </div>
           </div>
         </div>
