@@ -1,7 +1,8 @@
 .audioPlayer {
     display: flex;
-    width: 700px;
+    width: 100%;
     align-items: center;
+    height: 100%;
 }
 
 .forwardBackward {
@@ -12,6 +13,7 @@
     font-family: monospace;
     font-size: 16px;
     cursor: pointer;
+    color: #fff;
 }
 
 .playPause {
@@ -23,12 +25,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
 }
 
 .currentTime, 
 .duration {
     font-family: monospace;
     font-size: 16px;
+    color: #fff;
 }
 
 .currentTime {
@@ -48,6 +52,12 @@
     width: 100%;
     height: 11px;
     outline: none;
+}
+
+.audioImage {
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 /* progress bar - Safari */

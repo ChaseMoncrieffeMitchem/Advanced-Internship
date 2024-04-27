@@ -2,39 +2,46 @@ import Sidebar from "@/components/Sidebar";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 export default function playerId() {
   const router = useRouter();
   const { id } = router.query;
 
-  const [book, setBook] = useState({});
+  const [book, setBook] = useState(id);
   const [loading, setLoading] = useState(true);
 
   async function fetchBooks() {
-    console.log(id)
-    const { data } = await axios.get(
+    const response = await axios.get(
       `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`
     );
-    setBook(data);
     setLoading(false)
+    setBook(response?.data);
+    console.log(response?.data)
   }
+
 
   useEffect(() => {
     fetchBooks();
-  }, [book]);
+  }, [id]);
+
 
   return (
     <>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="row">
         {loading ? (
           <div>Loading...</div>
         ) : (
             <div className="container">
-              <h1>{book.title}</h1>
-              <p>{book.summary}</p>
+              <h1>{book?.title}</h1>
+              <p className="player__paragraph">{book?.summary}</p>
             </div>
         )}
+      </div>
+      <div className="audio__wrapper">
+        <AudioPlayer
+        book={book}/>
       </div>
     </>
   );

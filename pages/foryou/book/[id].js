@@ -13,13 +13,14 @@ export default function books() {
 
   const router = useRouter();
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
   const [subscribed, setSubscribed] = useState(true)
   const [loggedIn, setLoggedIn] = useState(true)
 
   const { id } = router.query;
 
   async function fetchBooks() {
+    setLoading(true)
     const { data } = await axios.get(
       `https://us-central1-summaristt.cloudfunctions.net/getBook?id=${id}`
     );
@@ -27,6 +28,7 @@ export default function books() {
     setLoading(false);
     console.log(data)
   }
+
 
   function goToSubscriptionPage() {
     if (subscribed && books.subscriptionRequired) {
@@ -48,7 +50,7 @@ export default function books() {
 
   useEffect(() => {
     fetchBooks();
-  }, [books]);
+  }, [id]);
 
   return (
     <>
