@@ -1141,3 +1141,16 @@ button:disabled {
 .player__paragraph {
   white-space: pre-line;
 }
+
+/* Accordion Icon */
+
+/* .accordion__icon {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  transition: transform .3s;
+}
+
+.accordion__icon--rotate {
+  transform: rotate(180deg);
+} */
