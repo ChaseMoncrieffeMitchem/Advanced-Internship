@@ -36,7 +36,7 @@ export default function LoginModal() {
       .then((data) => {
         const subscribe = onAuthStateChanged(auth, (currentUser) => {
           if (currentUser) {
-            // window.location = "https://summarist.vercel.app/for-you"
+            window.location = "/foryou"
             // console.log("You're In");
             dispatch(closeLoginModal());
             dispatch(setUser(currentUser.email));

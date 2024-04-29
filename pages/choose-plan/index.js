@@ -1,11 +1,75 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import styles from "@/styles/choosePlan.module.css";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import Footer from "@/components/Footer";
+import createMonthlyCheckoutSession from "@/stripe/createMonthlySession";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
+// import { getApp } from "@firebase/app"
+// import { getStripePayments } from "@invertase/firestore-stripe-payments"
+// import { createCheckoutSession } from "@invertase/firestore-stripe-payments"
+
+// const app = getApp()
+//   const payments = getStripePayments(app, {
+//     productsCollection: "products",
+//     customersCollection: "customers",
+//   })
+
+//   const session = await createCheckoutSession(payments, {
+//     price: mypriceId,
+//     // success_url: "www",
+//     // cancel_url: "www"
+//   })
+//   window.location.assign(session.url)
 
 export default function choosePlan() {
+  const isOpen = useSelector((state) => state.modals.signupModalOpen);
+  const dispatch = useDispatch();
+
+  const user = auth.currentUser;
+
+  
+
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       const email = user.email;
+  //       const userUid = user.uid;
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [user]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) return;
+      console.log(currentUser);
+      dispatch(
+        setUser({
+          email: currentUser.email,
+        })
+      );
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleMontly = async () => {
+    console.log("handle Monthly started")
+    try {
+      if (user) {
+        console.log("uid exists");
+        await createMonthlyCheckoutSession(user.uid);
+      }
+    } finally {
+      console.log("This ran");
+    }
+  };
+
   const itemOne =
     "Begin your complimentary 7-day trial with a Summarist annual membership. You are under no obligation to continue your subscription, and you will only be billed when the trial period expires. With Premium access, you can learn at your own pace and as frequently as you desire, and you may terminate your subscription prior to the conclusion of the 7-day free trial.";
   const itemTwo =
@@ -114,7 +178,7 @@ export default function choosePlan() {
 
             <div className={styles.cardCta}>
               <span>
-                <button className={styles.btn}>
+                <button onClick={() => handleMontly()} className={styles.btn}>
                   <span>Start your free 7-day trial</span>
                 </button>
               </span>
