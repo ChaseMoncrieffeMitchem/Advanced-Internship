@@ -2,10 +2,21 @@ import React from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "@/redux/modalSlice";
+import { initFirebase } from "@/firebase";
+import { getAuth } from "firebase/auth";
+
 
 export default function Sidebar() {
 
-  const dispatch = useDispatch() 
+  const app = initFirebase()
+  const auth = getAuth(app)
+
+  const signOut = () => {
+    auth.signOut()
+    window.location = "/"
+  }
+
+  // const dispatch = useDispatch() 
   return (
     <>
       <div className="sidebar__overlay--hidden sidebar__overlay"></div>
@@ -64,7 +75,7 @@ export default function Sidebar() {
               <div className="sidebar__icon--wrapper">
                 <svg></svg>
               </div>
-              <button onClick={() => dispatch(openLoginModal())} className="sidebar__link--text">Login</button>
+              <button onClick={() => signOut()} className="sidebar__link--text">Logout</button>
             </div>
           </div>
         </div>

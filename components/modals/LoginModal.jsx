@@ -7,9 +7,11 @@ import {
   signInWithEmailAndPassword,
   signInAnonymously,
 } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth, initFirebase } from "@/firebase";
 import { useAuth } from "@/contexts/authContext";
 import { setUser } from "@/redux/userSlice";
+import { useRouter } from "next/router";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 
 export default function LoginModal() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
@@ -22,6 +24,12 @@ export default function LoginModal() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const router = useRouter()
+
+  const app = initFirebase()
+  const auth = getAuth(app)
+  const provider = new GoogleAuthProvider()
+
   function guestLogin() {
     signInAnonymously(auth).then(() => {
     if (isSignedIn) return;
@@ -29,6 +37,14 @@ export default function LoginModal() {
       window.location = "/foryou";
     }
   })
+}
+
+async function googleSignIn() {
+  const result = await signInWithPopup(auth, provider)
+    const user = result.user
+    if (user) {
+      window.location = "/foryou"
+    }
 }
 
   async function handleSignIn() {
@@ -96,6 +112,7 @@ export default function LoginModal() {
             <button className="w-full " onClick={() => guestLogin()}>
               Login as Guest
             </button>
+            <button className="w-full" onClick={() => googleSignIn()}>Login with Google</button>
             <h1 className="text-center mt-4 font-bold text-lg">or</h1>
             <input
               placeholder="Email"

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import styles from "@/styles/choosePlan.module.css";
 import { IoIosArrowDown } from "react-icons/io";
@@ -9,6 +9,12 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
+
+import { initFirebase } from "@/firebase"
+import { getAuth } from "firebase/auth"
+import { getCheckoutUrl } from "@/account/stripePayment";
+import { useRouter } from "next/navigation";
+import { getPremiumStatus } from "@/account/getPremiumStatus";
 // import { getApp } from "@firebase/app"
 // import { getStripePayments } from "@invertase/firestore-stripe-payments"
 // import { createCheckoutSession } from "@invertase/firestore-stripe-payments"
@@ -30,10 +36,42 @@ export default function choosePlan() {
   const isOpen = useSelector((state) => state.modals.signupModalOpen);
   const dispatch = useDispatch();
 
-  const user = auth.currentUser;
+  // const user = auth.currentUser;
+
+  const app = initFirebase()
+  const auth = getAuth(app)
+
+  const userName = auth.currentUser?.displayName
+  const email = auth.currentUser?.email
+  const router = useRouter()
+  const [isPremium, setIsPremium] = useState(false)
+
+  useEffect(() => {
+    const checkPremium = async () => {
+      const newPremiumStatus = auth.currentUser
+        ? await getPremiumStatus(app)
+        : false;
+      setIsPremium(newPremiumStatus)
+    };
+    checkPremium();
+  }, [app, auth.currentUser?.uid])
+
+  const upgradeToMonthly = async () => {
+    
+    const priceId = "price_1PAQAiDzstqEKrnRQNg8gnzq";
+    const checkoutUrl = await getCheckoutUrl(app, priceId);
+    console.log("Upgrade to Monthly")
+    router.push(checkoutUrl)
+  }
+
+  const upgradeToYearly = async () => {
+    const priceId = "price_1PAQAEDzstqEKrnRoqsijaTU"
+    const checkoutUrl = await getCheckoutUrl(app, priceId)
+    router.push(checkoutUrl)
+    console.log("Upgrade to Yearly")
+  }
 
   
-
   // useEffect(() => {
   //   const unsubscribe = onAuthStateChanged(auth, (user) => {
   //     if (user) {
@@ -58,17 +96,17 @@ export default function choosePlan() {
     return unsubscribe;
   }, []);
 
-  const handleMontly = async () => {
-    console.log("handle Monthly started")
-    try {
-      if (user) {
-        console.log("uid exists");
-        await createMonthlyCheckoutSession(user.uid);
-      }
-    } finally {
-      console.log("This ran");
-    }
-  };
+  // const handleMontly = async () => {
+  //   console.log("handle Monthly started")
+  //   try {
+  //     if (user) {
+  //       console.log("uid exists");
+  //       await createMonthlyCheckoutSession(user.uid);
+  //     }
+  //   } finally {
+  //     console.log("This ran");
+  //   }
+  // };
 
   const itemOne =
     "Begin your complimentary 7-day trial with a Summarist annual membership. You are under no obligation to continue your subscription, and you will only be billed when the trial period expires. With Premium access, you can learn at your own pace and as frequently as you desire, and you may terminate your subscription prior to the conclusion of the 7-day free trial.";
@@ -178,8 +216,12 @@ export default function choosePlan() {
 
             <div className={styles.cardCta}>
               <span>
-                <button onClick={() => handleMontly()} className={styles.btn}>
+                <button onClick={() => upgradeToMonthly()} className={styles.btn}>
                   <span>Start your free 7-day trial</span>
+                </button>
+                <br/>
+                <button onClick={() => upgradeToYearly()} className={styles.btn}>
+                  <span>Start your Annual Membership</span>
                 </button>
               </span>
               <div className={styles.disclaimer}>
