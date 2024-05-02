@@ -6,10 +6,12 @@ import { openLoginModal } from "@/redux/modalSlice";
 import LoginModal from "@/components/modals/LoginModal";
 import SignupModal from "@/components/modals/SignupModal";
 import Sidebar from "@/components/Sidebar";
+import { useParams } from "next/navigation"
 
 export default function books() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen)
   const dispatch = useDispatch()
+  const params = useParams()
 
   const router = useRouter();
   const [books, setBooks] = useState([]);
@@ -50,7 +52,7 @@ export default function books() {
 
   useEffect(() => {
     fetchBooks();
-  }, [id]);
+  }, [params.id]);
 
   return (
     <>
