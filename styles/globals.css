@@ -1154,3 +1154,7 @@ button:disabled {
 .accordion__icon--rotate {
   transform: rotate(180deg);
 } */
+
+.no__display {
+  display: none;
+}

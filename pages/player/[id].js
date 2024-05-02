@@ -22,7 +22,9 @@ export default function playerId() {
 
 
   useEffect(() => {
-    fetchBooks();
+    if (id) {
+      fetchBooks();
+    }
   }, [id]);
 
 

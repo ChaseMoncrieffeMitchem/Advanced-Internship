@@ -8,7 +8,7 @@ import { FaRegCirclePause } from "react-icons/fa6";
 const AudioPlayer = ({book}) => {
   // state
   const [isPlaying, setIsPlaying] = useState(false);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
 
   console.log(book)
@@ -18,12 +18,22 @@ const AudioPlayer = ({book}) => {
   const progressBar = useRef(); // reference our progress bar
   const animationRef = useRef(); // reference the animation
 
+  // useEffect(() => {
+  //   const seconds = Math.floor(audioPlayer.current.duration);
+  //   setDuration(seconds);
+  //   progressBar.current.max = seconds;
+  //   // fetchBook()
+  // }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
+
   useEffect(() => {
-    const seconds = Math.floor(audioPlayer.current.duration);
-    setDuration(seconds);
-    progressBar.current.max = seconds;
-    // fetchBook()
-  }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
+    const handleLoadedMetadata = () => {
+      const seconds = Math.floor(audioPlayer.current.duration);
+      setDuration(seconds);
+      progressBar.current.max = seconds;
+    };
+  
+    audioPlayer.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+  })  
 
   function calculateTime(secs) {
     const minutes = Math.floor(secs / 60);

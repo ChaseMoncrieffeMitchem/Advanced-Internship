@@ -2,21 +2,19 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
-export default function RecommendedBooks() {
-  const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function RecommendedBooks({recommendedBooks, recommedDuration}) {
+  const [loading, setLoading] = useState(false);
 
-  async function fetchRecommendedBooks() {
-    const { data } = await axios.get(
-      "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=recommended"
-    );
-    setBooks(data);
-    setLoading(false);
+  function calculateTime(recommedDuration) {
+    if (recommedDuration) {
+      const minutes = Math.floor(recommedDuration / 60);
+      const returnMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(recommedDuration % 60);
+      const returnSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${returnMinutes}:${returnSeconds}`;
+    }
+    return "0:00";
   }
-
-  useEffect(() => {
-    fetchRecommendedBooks();
-  }, []);
 
   return (
     <>
@@ -26,7 +24,7 @@ export default function RecommendedBooks() {
         {loading ? (
           <div>Loading...</div>
         ) : (
-          books?.map((book, index) => (
+          recommendedBooks?.map((book, index) => (
             <Link
               className="for-you__recommended--books-link"
               href={"/foryou/book/" + book.id}
@@ -49,7 +47,7 @@ export default function RecommendedBooks() {
                   <div className="recommended__book--details-icon">
                     <svg></svg>
                   </div>
-                  <div className="recommended__book--details-text">03:24</div>
+                  <div className="recommended__book--details-text">{calculateTime(recommedDuration)}</div>
                 </div>
                 <div className="recommended__book--details">
                   <div className="recommended__book--details-icon">

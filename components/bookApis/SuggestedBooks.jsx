@@ -2,23 +2,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
-export default function SuggestedBooks() {
-  const [books, setbooks] = useState();
-  const [loading, setLoading] = useState(true);
-
-  async function fetchSuggestedBooks() {
-    const { data } = await axios.get(
-      "https://us-central1-summaristt.cloudfunctions.net/getBooks?status=suggested"
-    );
-    setbooks(data);
-    setLoading(false);
-    console.log(books);
-
-  }
-
-  useEffect(() => {
-    fetchSuggestedBooks();
-  }, []);
+export default function SuggestedBooks({suggestedBooks}) {
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
@@ -28,7 +13,7 @@ export default function SuggestedBooks() {
         {loading ? (
           <div>Loading...</div>
         ) : (
-          books.map((book, index) => (
+          suggestedBooks.map((book, index) => (
             <Link
               className="for-you__recommended--books-link"
               href={"/foryou/book/" + book.id}

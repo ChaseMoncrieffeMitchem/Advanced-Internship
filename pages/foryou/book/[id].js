@@ -11,7 +11,6 @@ import { useParams } from "next/navigation"
 export default function books() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen)
   const dispatch = useDispatch()
-  const params = useParams()
 
   const router = useRouter();
   const [books, setBooks] = useState([]);
@@ -51,8 +50,12 @@ export default function books() {
   }
 
   useEffect(() => {
-    fetchBooks();
-  }, [params.id]);
+    if (id) {
+      fetchBooks();
+    }
+  }, [id]);
+
+  console.log(books)
 
   return (
     <>
