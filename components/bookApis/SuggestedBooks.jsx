@@ -1,9 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
-export default function SuggestedBooks({suggestedBooks}) {
+export default function SuggestedBooks({ suggestedBooks }) {
   const [loading, setLoading] = useState(false);
+  const [audioDurations, setAudioDurations] = useState({});
+
+  const audioRefs = useRef({});
+
+  function onLoadedMetaData(bookId) {
+    return () => {
+      const seconds = audioRefs.current[bookId].duration || 0;
+      setAudioDurations((prevDurations) => ({
+        ...prevDurations,
+        [bookId]: seconds,
+      }));
+    };
+  }
+
+  function calculateTime(duration) {
+    if (duration) {
+      const minutes = Math.floor(duration / 60);
+      const returnMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+      const seconds = Math.floor(duration % 60);
+      const returnSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+      return `${returnMinutes}:${returnSeconds}`;
+    }
+    return "0:00";
+  }
 
   return (
     <>
@@ -19,7 +43,9 @@ export default function SuggestedBooks({suggestedBooks}) {
               href={"/foryou/book/" + book.id}
               key={index}
             >
-              <div className="book__pill book__pill--subscription-required">{book.subscriptionRequired === true ? "Premium" : ""}</div>
+              <div className="book__pill book__pill--subscription-required">
+                {book.subscriptionRequired === true ? "Premium" : ""}
+              </div>
               <audio></audio>
               <figure className="book__image--wrapper">
                 <img className="book__image" src={book.imageLink}></img>
@@ -34,7 +60,21 @@ export default function SuggestedBooks({suggestedBooks}) {
                   <div className="recommended__book--details-icon">
                     <svg></svg>
                   </div>
-                  <div className="recommended__book--details-text">03:24</div>
+                  {book?.audioLink && (
+                    <>
+                      <audio
+                        src={book.audioLink}
+                        ref={(element) =>
+                          (audioRefs.current[book.id] = element)
+                        }
+                        onLoadedMetadata={onLoadedMetaData(book.id)}
+                        className="no__display"
+                      ></audio>
+                      <div className="recommended__book--details-text">
+                        {calculateTime(audioDurations[book.id] || 0)}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className="recommended__book--details">
                   <div className="recommended__book--details-icon">
