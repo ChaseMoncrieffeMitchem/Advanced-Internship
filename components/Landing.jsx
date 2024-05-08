@@ -1,11 +1,14 @@
 import React from "react";
-import Image from "next/image"
+import Image from "next/image";
 import LoginModal from "./modals/LoginModal";
 import SignupModal from "./modals/SignupModal";
 import Logout from "./modals/Logout";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "@/redux/modalSlice";
 
 export default function Landing() {
 
+  const dispatch = useDispatch();
   return (
     <>
       <section id="landing">
@@ -24,13 +27,24 @@ export default function Landing() {
                   <br className="remove--tablet" />
                   and even people who don’t like to read.
                 </div>
+                <button
+                  onClick={() => dispatch(openLoginModal())}
+                  className="btn home__cta--btn"
+                >
+                  Login
+                </button>
                 <LoginModal />
                 <SignupModal />
                 <br />
                 <Logout />
               </div>
               <figure className="landing__image--mask">
-                <Image src="/images/landing.png" alt="landing" width={100} height={100}/>
+                <Image
+                  src="/images/landing.png"
+                  alt="landing"
+                  width={100}
+                  height={100}
+                />
               </figure>
             </div>
           </div>

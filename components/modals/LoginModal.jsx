@@ -96,12 +96,6 @@ async function googleSignIn() {
   return (
     <>
       {/* {!isSignedIn && (<Link href={"/home"} replace={true}/>)} */}
-      <button
-        onClick={() => dispatch(openLoginModal())}
-        className="btn home__cta--btn"
-      >
-        Login
-      </button>
       <Modal
         open={isOpen}
         onClose={() => dispatch(closeLoginModal())}

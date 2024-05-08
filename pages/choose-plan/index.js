@@ -10,8 +10,8 @@ import { auth } from "@/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
 
-import { initFirebase } from "@/firebase"
-import { getAuth } from "firebase/auth"
+import { initFirebase } from "@/firebase";
+import { getAuth } from "firebase/auth";
 import { getCheckoutUrl } from "@/account/stripePayment";
 import { useRouter } from "next/navigation";
 import { getPremiumStatus } from "@/account/getPremiumStatus";
@@ -38,49 +38,43 @@ export default function choosePlan() {
 
   // const user = auth.currentUser;
 
-  const app = initFirebase()
-  const auth = getAuth(app)
+  const app = initFirebase();
+  const auth = getAuth(app);
 
-  const userName = auth.currentUser?.displayName
-  const email = auth.currentUser?.email
-  const router = useRouter()
-  const [isPremium, setIsPremium] = useState(false)
+  const userName = auth.currentUser?.displayName;
+  const email = auth.currentUser?.email;
+  const router = useRouter();
+  const [isPremium, setIsPremium] = useState(false);
+
+  const [activePlan, setActivePlan] = useState("yearly");
+
+  function handlePlanChange(plan) {
+    setActivePlan(plan);
+  }
 
   useEffect(() => {
     const checkPremium = async () => {
       const newPremiumStatus = auth.currentUser
         ? await getPremiumStatus(app)
         : false;
-      setIsPremium(newPremiumStatus)
+      setIsPremium(newPremiumStatus);
     };
     checkPremium();
-  }, [app, auth.currentUser?.uid])
+  }, [app, auth.currentUser?.uid]);
 
   const upgradeToMonthly = async () => {
-    
     const priceId = "price_1PAQAiDzstqEKrnRQNg8gnzq";
     const checkoutUrl = await getCheckoutUrl(app, priceId);
-    console.log("Upgrade to Monthly")
-    router.push(checkoutUrl)
-  }
+    console.log("Upgrade to Monthly");
+    router.push(checkoutUrl);
+  };
 
   const upgradeToYearly = async () => {
-    const priceId = "price_1PAQAEDzstqEKrnRoqsijaTU"
-    const checkoutUrl = await getCheckoutUrl(app, priceId)
-    router.push(checkoutUrl)
-    console.log("Upgrade to Yearly")
-  }
-
-  
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       const email = user.email;
-  //       const userUid = user.uid;
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, [user]);
+    const priceId = "price_1PAQAEDzstqEKrnRoqsijaTU";
+    const checkoutUrl = await getCheckoutUrl(app, priceId);
+    router.push(checkoutUrl);
+    console.log("Upgrade to Yearly");
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -95,18 +89,6 @@ export default function choosePlan() {
 
     return unsubscribe;
   }, []);
-
-  // const handleMontly = async () => {
-  //   console.log("handle Monthly started")
-  //   try {
-  //     if (user) {
-  //       console.log("uid exists");
-  //       await createMonthlyCheckoutSession(user.uid);
-  //     }
-  //   } finally {
-  //     console.log("This ran");
-  //   }
-  // };
 
   const itemOne =
     "Begin your complimentary 7-day trial with a Summarist annual membership. You are under no obligation to continue your subscription, and you will only be billed when the trial period expires. With Premium access, you can learn at your own pace and as frequently as you desire, and you may terminate your subscription prior to the conclusion of the 7-day free trial.";
@@ -193,9 +175,16 @@ export default function choosePlan() {
                 <div className={styles.cardDot}></div>
               </div>
               <div>
-                <div className={styles.cardTitle}>Premium Plus Yearly</div>
-                <div className={styles.cardPrice}>$99.99/year</div>
-                <div className={styles.cardText}>7-day free trail included</div>
+                <div
+                  className={`${activePlan === "yearly" ? "cardDot" : ""}`}
+                  onClick={() => handlePlanChange("yearly")}
+                >
+                  <div className={styles.cardTitle}>Premium Plus Yearly</div>
+                  <div className={styles.cardPrice}>$99.99/year</div>
+                  <div className={styles.cardText}>
+                    7-day free trail included
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -208,21 +197,27 @@ export default function choosePlan() {
                 <div className={styles.cardDot}></div>
               </div>
               <div>
-                <div className={styles.cardTitle}>Premium Monthly</div>
-                <div className={styles.cardPrice}>$9.99/month</div>
-                <div className={styles.cardText}>No trail included</div>
+                <div className={`${activePlan === "monthly" ? "cardDot" : ""}`} onClick={() => handlePlanChange("monthly")}>
+                  <div className={styles.cardTitle}>Premium Monthly</div>
+                  <div className={styles.cardPrice}>$9.99/month</div>
+                  <div className={styles.cardText}>No trail included</div>
+                </div>
               </div>
             </div>
 
             <div className={styles.cardCta}>
               <span>
-                <button onClick={() => upgradeToMonthly()} className={styles.btn}>
-                  <span>Start your free 7-day trial</span>
+                <button
+                  onClick={() => upgradeToMonthly()}
+                  className={styles.btn}
+                >
+                  <span>
+                    {activePlan === "yearly"
+                      ? "Start your free 7-day trial"
+                      : "Start your Annual Membership"}
+                  </span>
                 </button>
-                <br/>
-                <button onClick={() => upgradeToYearly()} className={styles.btn}>
-                  <span>Start your Annual Membership</span>
-                </button>
+                <br />
               </span>
               <div className={styles.disclaimer}>
                 Cancel your trial at any time before it ends, and you won’t be
