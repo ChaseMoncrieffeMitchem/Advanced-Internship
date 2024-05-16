@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import { useSelector, useDispatch } from "react-redux";
-import { closeLoginModal, openLoginModal, openSignupModal } from "@/redux/modalSlice";
+import {
+  closeLoginModal,
+  openLoginModal,
+  openSignupModal,
+} from "@/redux/modalSlice";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -11,11 +15,12 @@ import { auth, initFirebase } from "@/firebase";
 import { useAuth } from "@/contexts/authContext";
 import { setUser } from "@/redux/userSlice";
 import { useRouter } from "next/router";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { IoClose } from "react-icons/io5";
 
 export default function LoginModal() {
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
-
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -24,35 +29,40 @@ export default function LoginModal() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const app = initFirebase()
-  const auth = getAuth(app)
-  const provider = new GoogleAuthProvider()
+  const app = initFirebase();
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  console.log(auth);
 
   function guestLogin() {
     signInAnonymously(auth).then(() => {
-    if (isSignedIn) return;
-    if (!isSignedIn) {
+      if (isSignedIn) return;
+      if (!isSignedIn) {
+        dispatch(setUser(auth.currentUser.email));
+        console.log(user);
+        // window.location = "/foryou";
+      }
+    });
+  }
+
+  async function googleSignIn() {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    if (user) {
+      dispatch(setUser(auth.currentUser.email));
+      console.log(user);
       window.location = "/foryou";
     }
-  })
-}
-
-async function googleSignIn() {
-  const result = await signInWithPopup(auth, provider)
-    const user = result.user
-    if (user) {
-      window.location = "/foryou"
-    }
-}
+  }
 
   async function handleSignIn() {
     await signInWithEmailAndPassword(auth, email, password)
       .then((data) => {
         const subscribe = onAuthStateChanged(auth, (currentUser) => {
           if (currentUser) {
-            window.location = "/foryou"
+            window.location = "/foryou";
             // console.log("You're In");
             dispatch(closeLoginModal());
             dispatch(setUser(currentUser.email));
@@ -95,7 +105,6 @@ async function googleSignIn() {
 
   return (
     <>
-      {/* {!isSignedIn && (<Link href={"/home"} replace={true}/>)} */}
       <Modal
         open={isOpen}
         onClose={() => dispatch(closeLoginModal())}
@@ -103,10 +112,19 @@ async function googleSignIn() {
       >
         <div className="w-[90%] h-fit bg-white md:w-[560px] md:h-[600px] border border-transparent rounded-lg flex justify-center">
           <div className="w-[90%] mt-8 flex flex-col">
-            <button className="w-full " onClick={() => guestLogin()}>
+            <div className="relative w-full z-50">
+              <IoClose
+                className="absolute top-0 right-0 cursor-pointer z-50"
+                style={{ width: '30px', height: '30px' }}
+                onClick={() => dispatch(closeLoginModal())}
+              />
+            </div>
+            <button className="" onClick={() => guestLogin()}>
               Login as Guest
             </button>
-            <button className="w-full" onClick={() => googleSignIn()}>Login with Google</button>
+            <button className="" onClick={() => googleSignIn()}>
+              Login with Google
+            </button>
             <h1 className="text-center mt-4 font-bold text-lg">or</h1>
             <input
               placeholder="Email"
@@ -120,13 +138,16 @@ async function googleSignIn() {
               type={"password"}
               onChange={(e) => setPassword(e.target.value)}
             ></input>
-            <button
-              className="btn mt-8"
-              onClick={handleSignIn}
-            >
+            <button className="btn mt-8" onClick={handleSignIn}>
               Login
             </button>
-            <button onClick={() => dispatch(openSignupModal()) && dispatch(closeLoginModal())}>Don't have an account?</button>
+            <button
+              onClick={() =>
+                dispatch(openSignupModal()) && dispatch(closeLoginModal())
+              }
+            >
+              Don't have an account?
+            </button>
             {errorMessage && <p className=" text-pink-900">{errorMessage}</p>}
           </div>
         </div>

@@ -41,3 +41,39 @@
     justify-content: center;
     min-width: 180px;
 }
+
+.loginWrapper {
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.loginWrapper img {
+    width: 100%;
+    height: 100%;
+}
+
+.loginText {
+    font-size: 24px;
+    font-weight: 700;
+    color: #032b41;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.btn {
+    background-color: #2bd97c;
+    color: #032b41;
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    width: 300px;
+}

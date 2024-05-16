@@ -46,7 +46,7 @@ export default function choosePlan() {
   const router = useRouter();
   const [isPremium, setIsPremium] = useState(false);
 
-  const [activePlan, setActivePlan] = useState("yearly");
+  const [activePlan, setActivePlan] = useState("monthly");
 
   function handlePlanChange(plan) {
     setActivePlan(plan);
@@ -170,15 +170,17 @@ export default function choosePlan() {
               Choose the plan that fits you
             </div>
 
-            <div className={styles.card}>
+            <div
+              className={styles.card}
+              onClick={() => handlePlanChange("yearly")}
+            >
               <div className={styles.cardCircle}>
-                <div className={styles.cardDot}></div>
+                <div
+                  className={`${activePlan === "yearly" ? styles.cardDot : ""}`}
+                ></div>
               </div>
               <div>
-                <div
-                  className={`${activePlan === "yearly" ? "cardDot" : ""}`}
-                  onClick={() => handlePlanChange("yearly")}
-                >
+                <div>
                   <div className={styles.cardTitle}>Premium Plus Yearly</div>
                   <div className={styles.cardPrice}>$99.99/year</div>
                   <div className={styles.cardText}>
@@ -192,12 +194,19 @@ export default function choosePlan() {
               <div>or</div>
             </div>
 
-            <div className={styles.card}>
+            <div
+              className={styles.card}
+              onClick={() => handlePlanChange("monthly")}
+            >
               <div className={styles.cardCircle}>
-                <div className={styles.cardDot}></div>
+                <div
+                  className={`${
+                    activePlan === "monthly" ? styles.cardDot : ""
+                  }`}
+                ></div>
               </div>
               <div>
-                <div className={`${activePlan === "monthly" ? "cardDot" : ""}`} onClick={() => handlePlanChange("monthly")}>
+                <div>
                   <div className={styles.cardTitle}>Premium Monthly</div>
                   <div className={styles.cardPrice}>$9.99/month</div>
                   <div className={styles.cardText}>No trail included</div>
@@ -208,13 +217,17 @@ export default function choosePlan() {
             <div className={styles.cardCta}>
               <span>
                 <button
-                  onClick={() => upgradeToMonthly()}
+                  onClick={
+                    activePlan === "yearly"
+                      ? () => upgradeToYearly()
+                      : () => upgradeToMonthly()
+                  }
                   className={styles.btn}
                 >
                   <span>
                     {activePlan === "yearly"
                       ? "Start your free 7-day trial"
-                      : "Start your Annual Membership"}
+                      : "Start your Monthly Membership"}
                   </span>
                 </button>
                 <br />

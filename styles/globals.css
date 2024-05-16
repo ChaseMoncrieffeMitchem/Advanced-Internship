@@ -995,7 +995,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 60px);
   padding-bottom: 20px;
   overflow-y: auto;
 }
@@ -1045,8 +1045,6 @@ button:disabled {
   height: 40px;
 }
 
-
-
 .sidebar__top {
   flex: 1;
   margin-top: 40px;
@@ -1073,6 +1071,11 @@ button:disabled {
   align-items: center;
   justify-content: center;
   margin-right: 8px;
+}
+
+.sidebar__icon--wrapper svg{
+  width: 24px;
+  height: 24px;
 }
 
 /* Audio Player */
