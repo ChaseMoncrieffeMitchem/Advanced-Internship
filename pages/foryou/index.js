@@ -1,4 +1,5 @@
 import { AudioPlayer } from "@/components/AudioPlayer";
+import SearchBar from "@/components/SearchBar";
 import Sidebar from "@/components/Sidebar";
 import RecommendedBooks from "@/components/bookApis/RecommendedBooks";
 import SelectedBooks from "@/components/bookApis/SelectedBooks";
@@ -82,6 +83,7 @@ export default function forYou() {
   return (
     <>
       <div className="wrapper">
+        <SearchBar />
         <Sidebar />
         <div className="row">
           <div className="container">

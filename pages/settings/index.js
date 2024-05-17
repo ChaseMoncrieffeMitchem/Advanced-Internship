@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import LoginModal from "@/components/modals/LoginModal";
 import { openLoginModal } from "@/redux/modalSlice";
+import SearchBar from "@/components/SearchBar";
 
 export default function settings() {
   const [isPremium, setIsPremium] = useState(false);
@@ -42,6 +43,7 @@ export default function settings() {
       <div>
         <div className="wrapper"></div>
         <div className="search__background"></div>
+        <SearchBar />
         <Sidebar />
         <div className="container">
           <div className="row">
