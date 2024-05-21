@@ -18,7 +18,7 @@ export default function Sidebar() {
 
   const signOut = () => {
     auth.signOut();
-    dispatch(signOutUser())
+    dispatch(signOutUser());
   };
 
   // const dispatch = useDispatch()
@@ -31,7 +31,9 @@ export default function Sidebar() {
         <div className="sidebar__logo">
           <img src="https://summarist.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.1b1c490b.png&w=640&q=75"></img>
         </div>
-        <div className="sidebar__wrapper">
+        <div
+          className="sidebar__wrapper"
+        >
           <div className="sidebar__top">
             <Link href="/foryou" className="sidebar__link--wrapper">
               <div className="sidebar__link--line"></div>
@@ -50,7 +52,10 @@ export default function Sidebar() {
               </div>
               <div className="sidebar__link--text">For You</div>
             </Link>
-            <Link href="/library" className="sidebar__link--wrapper">
+            <Link
+              href="/library"
+              className="sidebar__link--wrapper sidebar__link--not-allowed"
+            >
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <svg

@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import styles from "@/styles/Search.module.css";
 import axios from "axios";
+import Link from "next/link"
 
 export default function SearchBar() {
   const [search, setSearch] = useState("");
   const [bookResults, setBookResults] = useState(null);
-  const [] = useState();
+  const [bookWrapper, setBookWrapper] = useState(false);
 
   const debounce = (callback, delay) => {
     let timerId;
@@ -29,8 +30,12 @@ export default function SearchBar() {
   };
 
   useEffect(() => {
-
     const fetchBySearch = async () => {
+      if (search.length == 0) {
+        setBookWrapper(false);
+        return;
+      }
+
       try {
         const response = await axios.get(
           `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${search}`
@@ -39,6 +44,8 @@ export default function SearchBar() {
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
+      } finally {
+        setBookWrapper(true);
       }
     };
 
@@ -92,48 +99,37 @@ export default function SearchBar() {
               </svg>
             </div>
           </div>
-          <div className={styles.booksWrapper}>
-            {!bookResults ? (
-              <div>Loading...</div>
-            ) : (
-              bookResults?.map((bookResult) => {
-                <a className={styles.bookLink} href="">
-                  <audio src={bookResult.audioLink}></audio>
-                  <figure className={styles.imageWrapper}>
-                    <Image
-                      className={styles.image}
-                      src={bookResult.imageLink}
-                      width={80}
-                      //   style="display: block"
-                    ></Image>
-                  </figure>
-                  <div>
-                    <div className={styles.title}>{bookResult.title}</div>
-                    <div className={styles.author}>{bookResult.author}</div>
-                    <div className={styles.duration}>
-                      <div className={styles.details}>
-                        <div className={styles.detailsIcon}>
-                          <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            stroke-width="0"
-                            viewBox="0 0 24 24"
-                            height="1em"
-                            width="1em"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path>
-                            <path d="M13 7h-2v6h6v-2h-4z"></path>
-                          </svg>
+          {bookWrapper && (
+            <>
+              {!bookResults ? (
+                <div>Loading...</div>
+              ) : (
+                <div className={styles.booksWrapper}>
+                  {bookResults?.map((bookResult, index) => (
+                    <Link key={index} className={styles.bookLink} href={"/foryou/book/" + bookResult.id}>
+                      <audio src={bookResult.audioLink}></audio>
+                      <figure className={styles.imageWrapper}>
+                        <img
+                          className={styles.image}
+                          src={bookResult.imageLink}
+                          width={80}
+                          //   style="display: block"
+                        ></img>
+                      </figure>
+                      <div>
+                        <div className={styles.title}>{bookResult.title}</div>
+                        <div className={styles.author}>{bookResult.author}</div>
+                        <div className={styles.duration}>
+                          <div className={styles.details}>
+                          </div>
                         </div>
-                        <div className={styles.detailsText}>03:24</div>
                       </div>
-                    </div>
-                  </div>
-                </a>;
-              })
-            )}
-          </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </>

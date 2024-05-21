@@ -25,15 +25,15 @@ export default function SelectedBooks() {
         <div>Loading...</div>
       ) : (
         books.map((book, index) => (
-          <Link className="selected__book" href="foryou/book/f9gy1gpai8" key={index}>
-            <div className="selected__book--sub-title">
-              {book.subTitle}
-            </div>
+          <Link
+            className="selected__book"
+            href="foryou/book/f9gy1gpai8"
+            key={index}
+          >
+            <div className="selected__book--sub-title">{book.subTitle}</div>
             <div className="selected__book--line"></div>
             <div className="selected__book--content">
-              <figure
-                className="book__image--wrapper-figure"
-              >
+              <figure className="book__image--wrapper" style={{height: 140, width: 140, minWidth: 140}}>
                 <img
                   className="book__image"
                   // style={"display: block"}
@@ -44,9 +44,21 @@ export default function SelectedBooks() {
                 <div className="selected__book--title">{book.title}</div>
                 <div className="selected__book--author">{book.author}</div>
                 <div className="selected__book--duration-wrapper">
-                  <div className="selected__book--icon"></div>
+                  <div className="selected__book--icon">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 16 16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+                    </svg>
+                  </div>
+                  <div className="selected__book--duration">3 min 23 secs</div>
                 </div>
-                <div className="selected__book--duration">3 min 23 secs</div>
               </div>
             </div>
           </Link>

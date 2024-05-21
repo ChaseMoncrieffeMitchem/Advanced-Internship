@@ -16,7 +16,7 @@ export default function settings() {
 
   const app = initFirebase();
   const auth = getAuth(app);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.email);
 
@@ -40,13 +40,12 @@ export default function settings() {
 
   return (
     <>
-      <div>
-        <div className="wrapper"></div>
-        <div className="search__background"></div>
+      <div className={styles.wrapper}>
+        {/* <div className="search__background"></div> */}
         <SearchBar />
         <Sidebar />
-        <div className="container">
-          <div className="row">
+        <div className={styles.container}>
+          <div className={styles.row}>
             <div className={styles.title}>Settings</div>
             {user ? (
               <>
@@ -81,7 +80,10 @@ export default function settings() {
                 <div className={styles.loginText}>
                   Log in to your account to see your details
                 </div>
-                <button className={styles.btn} onClick={() => dispatch(openLoginModal())}>
+                <button
+                  className={styles.btn}
+                  onClick={() => dispatch(openLoginModal())}
+                >
                   Login
                   <LoginModal />
                 </button>

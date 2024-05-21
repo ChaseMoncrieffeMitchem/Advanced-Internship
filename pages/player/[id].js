@@ -29,20 +29,24 @@ export default function playerId() {
 
   return (
     <>
-      <SearchBar />
-      <Sidebar />
-      <div className="row">
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <div className="container">
-            <h1>{book?.title}</h1>
-            <p className="player__paragraph">{book?.summary}</p>
-          </div>
-        )}
-      </div>
-      <div className="audio__wrapper">
-        <AudioPlayer book={book} />
+      <div className="wrapper">
+        <SearchBar />
+        <Sidebar style={{ height: 'calc(-140px + 100vh)' }}/>
+        <div className="summary">
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              <div className="audio__book--summary">
+                <h1 className="audio__book--summary-title">
+                  <b>{book?.title}</b>
+                </h1>
+                <p className="audio__book--summary-text">{book?.summary}</p>
+              </div>
+                <AudioPlayer book={book} />
+            </>
+          )}
+        </div>
       </div>
     </>
   );

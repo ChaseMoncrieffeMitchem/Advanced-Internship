@@ -233,8 +233,7 @@ export default function choosePlan() {
                 <br />
               </span>
               <div className={styles.disclaimer}>
-                Cancel your trial at any time before it ends, and you won’t be
-                charged.
+                {activePlan === "yearly" ? "Cancel your trial at any time before it ends, and you won’t be charged." : "30-day money back guarantee, no questions asked."}
               </div>
             </div>
 

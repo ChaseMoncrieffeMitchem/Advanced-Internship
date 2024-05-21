@@ -58,9 +58,6 @@ export default function SignupModal() {
 
   return (
     <>
-      <button open={isOpen} onClick={() => dispatch(openSignupModal())}>
-        Sign Up
-      </button>
       <Modal
         open={isOpen}
         onClose={() => dispatch(closeSignupModal())}

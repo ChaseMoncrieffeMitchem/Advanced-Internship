@@ -9,13 +9,15 @@ import LoginModal from "@/components/modals/LoginModal";
 export default function Home() {
   return (
     <>
-      {/* <LoginModal /> */}
-      <Navbar />
-      <Landing />
-      <Features />
-      <Reviews />
-      <Numbers />
-      <Footer />
+      <div className="wrapper wrapper__full">
+        {/* <LoginModal /> */}
+        <Navbar />
+        <Landing />
+        <Features />
+        <Reviews />
+        <Numbers />
+        <Footer />
+      </div>
     </>
   );
 }

@@ -3,7 +3,7 @@ import React from "react";
 export default function Footer() {
   return (
     <>
-      <section id="footer">
+      <section id="footer" className="footer">
         <div className="container">
           <div className="row">
             <div className="footer__top--wrapper">

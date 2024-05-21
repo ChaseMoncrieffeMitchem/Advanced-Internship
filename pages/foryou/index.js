@@ -85,8 +85,8 @@ export default function forYou() {
       <div className="wrapper">
         <SearchBar />
         <Sidebar />
-        <div className="row">
-          <div className="container">
+        <div className="row for-you__row">
+          <div className="container for-you__container">
             <div className="for-you__wrapper">
               <audio
                 className="no__display"
