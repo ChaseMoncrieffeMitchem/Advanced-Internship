@@ -8,17 +8,26 @@ import SignupModal from "@/components/modals/SignupModal";
 import Sidebar from "@/components/Sidebar";
 import { useParams } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import { initFirebase } from "@/firebase";
+import { getAuth } from "firebase/auth";
+import { getPremiumStatus } from "@/account/getPremiumStatus";
 
 export default function books() {
+  const app = initFirebase();
+  const auth = getAuth(app);
+
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
 
   const router = useRouter();
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [subscribed, setSubscribed] = useState(true);
   const [loggedIn, setLoggedIn] = useState(true);
   const [audioDurations, setAudioDurations] = useState({});
+  const [isPremium, setIsPremium] = useState(false);
 
   const { id } = router.query;
 
@@ -51,13 +60,13 @@ export default function books() {
   }
 
   function goToSubscriptionPage() {
-    if (subscribed && books.subscriptionRequired) {
+    if (!isPremium && books.subscriptionRequired && loggedIn) {
       return (window.location = "/choose-plan");
     }
   }
 
   function goToPlayerIdPage() {
-    if (!books.subscriptionRequired || subscribed) {
+    if (!books.subscriptionRequired && loggedIn || isPremium && loggedIn) {
       return (window.location = "/player/" + id);
     }
   }
@@ -72,7 +81,14 @@ export default function books() {
     if (id) {
       fetchBooks();
     }
-  }, [id]);
+    const checkPremium = async () => {
+      const newPremiumStatus = auth.currentUser
+        ? await getPremiumStatus(app)
+        : false;
+      setIsPremium(newPremiumStatus);
+    };
+    checkPremium();
+  }, [id, app, auth.currentUser?.uid]);
 
   console.log(books);
 
@@ -88,7 +104,13 @@ export default function books() {
           <audio></audio>
           <div className="container">
             {loading ? (
-              <div>Loading...</div>
+              <Stack spacing={1}>
+                <Skeleton variant="rectangular" height={500} width={500} />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="rectangular" height={300} width={500} />
+              </Stack>
             ) : (
               <div className="inner__wrapper" books={books}>
                 <div className="inner__book">
@@ -189,8 +211,8 @@ export default function books() {
                   <div className="inner-book__read--btn-wrapper">
                     <button
                       onClick={() =>
-                        goToSubscriptionPage() ||
                         goToPlayerIdPage() ||
+                        goToSubscriptionPage() ||
                         dispatch(openLoginModal())
                       }
                       className="inner-book__read--btn"
@@ -211,7 +233,11 @@ export default function books() {
                       <div className="inner-book__read--text">Read</div>
                     </button>
                     <button
-                      onClick={() => dispatch(openLoginModal())}
+                      onClick={() =>
+                        goToPlayerIdPage() ||
+                        goToSubscriptionPage() ||
+                        dispatch(openLoginModal())
+                      }
                       className="inner-book__read--btn"
                     >
                       <div className="inner-book__read--icon">
@@ -274,7 +300,10 @@ export default function books() {
                   </div>
                 </div>
                 <div className="inner-book--img-wrapper">
-                  <figure className="book__image--wrapper" style={{height: 300, width: 300, minWidth: 300}}>
+                  <figure
+                    className="book__image--wrapper"
+                    style={{ height: 300, width: 300, minWidth: 300 }}
+                  >
                     <img className="book__image" src={books.imageLink}></img>
                   </figure>
                 </div>

@@ -110,20 +110,42 @@ export default function LoginModal() {
         onClose={() => dispatch(closeLoginModal())}
         className="flex justify-center items-center"
       >
-        <div className="w-[90%] h-fit bg-white md:w-[560px] md:h-[600px] border border-transparent rounded-lg flex justify-center">
-          <div className="w-[90%] mt-8 flex flex-col">
-            <div className="relative w-full z-50">
-              <IoClose
-                className="absolute top-0 right-0 cursor-pointer z-50"
-                style={{ width: '30px', height: '30px' }}
-                onClick={() => dispatch(closeLoginModal())}
-              />
-            </div>
-            <button className="" onClick={() => guestLogin()}>
-              Login as Guest
+        <div className="w-[90%] h-fit bg-white md:w-[560px] md:h-[600px] border border-transparent rounded-lg flex justify-center relative">
+          <IoClose
+            className="absolute top-1 right-1 cursor-pointer z-50"
+            style={{ width: "30px", height: "30px" }}
+            onClick={() => dispatch(closeLoginModal())}
+          />
+          <div className="w-[90%] mt-16 flex flex-col">
+            <div className="w-full z-50"></div>
+            <button
+              className="mb-4 py-2 px-4 flex items-center gap-2  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+              onClick={() => guestLogin()}
+            >
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 448 512"
+                height="1.5em"
+                width="1.5em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
+              </svg>
+              <span>Login as Guest</span>
             </button>
-            <button className="" onClick={() => googleSignIn()}>
-              Login with Google
+            <button
+              onClick={() => googleSignIn()}
+              class="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
+            >
+              <img
+                class="w-6 h-6"
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                loading="lazy"
+                alt="google logo"
+              />
+              <span>Login with Google</span>
             </button>
             <h1 className="text-center mt-4 font-bold text-lg">or</h1>
             <input
@@ -141,6 +163,7 @@ export default function LoginModal() {
             <button className="btn mt-8" onClick={handleSignIn}>
               Login
             </button>
+            <br></br>
             <button
               onClick={() =>
                 dispatch(openSignupModal()) && dispatch(closeLoginModal())
@@ -148,6 +171,7 @@ export default function LoginModal() {
             >
               Don't have an account?
             </button>
+            <br></br>
             {errorMessage && <p className=" text-pink-900">{errorMessage}</p>}
           </div>
         </div>

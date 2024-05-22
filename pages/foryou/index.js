@@ -7,7 +7,9 @@ import SuggestedBooks from "@/components/bookApis/SuggestedBooks";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 
+
 export default function forYou() {
+  const [loading, setLoading] = useState(true)
   const [suggestedBooks, setSuggestedBooks] = useState([]);
   const [recommendedBooks, setRecommendedBooks] = useState([]);
   const [recommendedDuration, setRecommendedDuration] = useState(null);
@@ -23,6 +25,7 @@ export default function forYou() {
     );
     setSuggestedBooks(data);
     console.log(data);
+    setLoading(false)
   }
 
   async function fetchRecommendedBooks() {
@@ -31,6 +34,7 @@ export default function forYou() {
     );
     setRecommendedBooks(data);
     console.log(data);
+    setLoading(false)
   }
 
   function calculateTimeRecommended() {
@@ -104,10 +108,12 @@ export default function forYou() {
               <RecommendedBooks
                 recommendedBooks={recommendedBooks}
                 recommendedDuration={recommendedDuration}
+                loading={loading}
               />
               <SuggestedBooks
                 suggestedBooks={suggestedBooks}
                 suggestedDuration={suggestedDuration}
+                loading={loading}
               />
             </div>
           </div>

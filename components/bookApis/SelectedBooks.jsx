@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function SelectedBooks() {
   const [books, setBooks] = useState();
@@ -22,9 +23,9 @@ export default function SelectedBooks() {
     <>
       <div className="for-you__title">Selected just for you</div>
       {loading ? (
-        <div>Loading...</div>
+        <Skeleton variant="rectangular" height={190} width={680}/>
       ) : (
-        books.map((book, index) => (
+        books?.map((book, index) => (
           <Link
             className="selected__book"
             href="foryou/book/f9gy1gpai8"

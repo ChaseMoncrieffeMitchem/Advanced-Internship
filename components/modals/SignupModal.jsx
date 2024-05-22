@@ -79,7 +79,9 @@ export default function SignupModal() {
               onChange={e => setPassword(e.target.value)}
             ></input>
             <button onClick={handleSignup} className="btn mt-8">Sign up</button>
+            <br></br>
             <button onClick={() => dispatch(openLoginModal()) && dispatch(closeSignupModal())}>Already have an account?</button>
+            <br></br>
             {errorMessage && <p className="text-pink-700">{errorMessage}</p>}
           </div>
         </div>

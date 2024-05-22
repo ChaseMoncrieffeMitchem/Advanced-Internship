@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import SearchBar from "@/components/SearchBar";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 
 export default function playerId() {
   const router = useRouter();
@@ -31,10 +33,14 @@ export default function playerId() {
     <>
       <div className="wrapper">
         <SearchBar />
-        <Sidebar style={{ height: 'calc(-140px + 100vh)' }}/>
+        <Sidebar style={{ height: "calc(-140px + 100vh)" }} />
         <div className="summary">
           {loading ? (
-            <div>Loading...</div>
+            <div class="loadingio-eclipse">
+              <div class="ldio-rpinwye8j0b">
+                <div></div>
+              </div>
+            </div>
           ) : (
             <>
               <div className="audio__book--summary">
@@ -43,7 +49,7 @@ export default function playerId() {
                 </h1>
                 <p className="audio__book--summary-text">{book?.summary}</p>
               </div>
-                <AudioPlayer book={book} />
+              <AudioPlayer book={book} />
             </>
           )}
         </div>

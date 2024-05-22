@@ -44,6 +44,7 @@ export default function settings() {
         {/* <div className="search__background"></div> */}
         <SearchBar />
         <Sidebar />
+        <LoginModal />
         <div className={styles.container}>
           <div className={styles.row}>
             <div className={styles.title}>Settings</div>
@@ -85,13 +86,12 @@ export default function settings() {
                   onClick={() => dispatch(openLoginModal())}
                 >
                   Login
-                  <LoginModal />
                 </button>
               </div>
             )}
           </div>
         </div>{" "}
-        {memberButton}
+        {/* {memberButton} */}
       </div>
     </>
   );
