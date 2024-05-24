@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 import { openLoginModal } from "@/redux/modalSlice";
 import { initFirebase } from "@/firebase";
 import { getAuth } from "firebase/auth";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LoginModal from "./modals/LoginModal";
 import SignupModal from "./modals/SignupModal";
 import { signOutUser } from "@/redux/userSlice";
+import { useRouter } from 'next/router'
 
 export default function Sidebar() {
+
+  const sidebarToggle = useSelector((state) => state.sidebar.sidebarToggle)
+
   const app = initFirebase();
   const auth = getAuth(app);
+
+  const router = useRouter()
+  const pathname = router?.pathname
 
   const user = useSelector((state) => state.user.email);
   const dispatch = useDispatch();
@@ -21,18 +27,17 @@ export default function Sidebar() {
     dispatch(signOutUser());
   };
 
-  // const dispatch = useDispatch()
   return (
     <>
       <LoginModal />
       <SignupModal />
       <div className="sidebar__overlay--hidden sidebar__overlay"></div>
-      <div className="sidebar sidbar--closed">
+      <div className={`sidebar ${sidebarToggle ? "sidebar__open" : "sidebar__hidden"}`}>
         <div className="sidebar__logo">
           <img src="https://summarist.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.1b1c490b.png&w=640&q=75"></img>
         </div>
         <div
-          className="sidebar__wrapper"
+          className={`sidebar__wrapper ${pathname.startsWith("/player/") ? "sidebar__player--wrapper" : ""}`}
         >
           <div className="sidebar__top">
             <Link href="/foryou" className="sidebar__link--wrapper">

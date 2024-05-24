@@ -13,10 +13,13 @@ import Stack from "@mui/material/Stack";
 import { initFirebase } from "@/firebase";
 import { getAuth } from "firebase/auth";
 import { getPremiumStatus } from "@/account/getPremiumStatus";
+import { setUser } from "@/redux/userSlice";
 
 export default function books() {
   const app = initFirebase();
   const auth = getAuth(app);
+
+  const user = useSelector((state) => state.user.email);
 
   const isOpen = useSelector((state) => state.modals.loginModalOpen);
   const dispatch = useDispatch();
@@ -56,18 +59,16 @@ export default function books() {
     );
     setBooks(data);
     setLoading(false);
-    console.log(data);
   }
 
-  function goToSubscriptionPage() {
-    if (!isPremium && books.subscriptionRequired && loggedIn) {
-      return (window.location = "/choose-plan");
+  function checkLogin() {
+    if (user && (isPremium || !books.subscriptionRequired)) {
+      return (window.location = "/player/" + id)
+    } if (user && !isPremium) {
+      return (window.location = "/choose-plan")
     }
-  }
-
-  function goToPlayerIdPage() {
-    if (!books.subscriptionRequired && loggedIn || isPremium && loggedIn) {
-      return (window.location = "/player/" + id);
+    else {
+      dispatch(openLoginModal())
     }
   }
 
@@ -89,8 +90,6 @@ export default function books() {
     };
     checkPremium();
   }, [id, app, auth.currentUser?.uid]);
-
-  console.log(books);
 
   return (
     <>
@@ -114,7 +113,11 @@ export default function books() {
             ) : (
               <div className="inner__wrapper" books={books}>
                 <div className="inner__book">
-                  <div className="inner-book__title">{books.title}</div>
+                  <div className="inner-book__title">
+                    {books.subscriptionRequired
+                      ? `${books.title} (Premium)`
+                      : `${books.title}`}
+                  </div>
                   <div className="inner-book__author">{books.author}</div>
                   <div className="inner-book__sub--title">{books.subTitle}</div>
                   <div className="inner-book__wrapper">
@@ -210,11 +213,7 @@ export default function books() {
                   </div>
                   <div className="inner-book__read--btn-wrapper">
                     <button
-                      onClick={() =>
-                        goToPlayerIdPage() ||
-                        goToSubscriptionPage() ||
-                        dispatch(openLoginModal())
-                      }
+                      onClick={() => checkLogin()}
                       className="inner-book__read--btn"
                     >
                       <div className="inner-book__read--icon">
@@ -233,11 +232,7 @@ export default function books() {
                       <div className="inner-book__read--text">Read</div>
                     </button>
                     <button
-                      onClick={() =>
-                        goToPlayerIdPage() ||
-                        goToSubscriptionPage() ||
-                        dispatch(openLoginModal())
-                      }
+                      onClick={() => checkLogin()}
                       className="inner-book__read--btn"
                     >
                       <div className="inner-book__read--icon">

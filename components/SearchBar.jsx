@@ -2,11 +2,19 @@ import React, { useEffect, useState, useCallback } from "react";
 import styles from "@/styles/Search.module.css";
 import axios from "axios";
 import Link from "next/link"
+import Sidebar from "./Sidebar";
+import sidebarSlice from "@/redux/sidebarSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { setSidebarToggle } from "@/redux/sidebarSlice";
 
 export default function SearchBar() {
   const [search, setSearch] = useState("");
   const [bookResults, setBookResults] = useState(null);
   const [bookWrapper, setBookWrapper] = useState(false);
+  const sidebarToggle = useSelector((state) => state.sidebar.sidebarToggle)
+
+  const [isOpen, setIsOpen] = useState(true)
+  const dispatch = useDispatch()
 
   const debounce = (callback, delay) => {
     let timerId;
@@ -52,10 +60,16 @@ export default function SearchBar() {
     fetchBySearch();
   }, [search]);
 
+  function toggleSidebar() {
+    dispatch(setSidebarToggle(!sidebarToggle))
+    console.log(sidebarToggle)
+  }
+
   return (
     <>
       <div className={styles.background}>
         <div className={styles.wrapper}>
+          <Sidebar/>
           <div className={styles.content}>
             <div className={styles.search}>
               <div className={styles.inputWrapper}>
@@ -80,7 +94,9 @@ export default function SearchBar() {
                 </div>
               </div>
             </div>
-            <div className={styles.toggleBtn}>
+            <div
+            onClick={() => toggleSidebar()} 
+            className={styles.toggleBtn}>
               <svg
                 stroke="currentColor"
                 fill="none"

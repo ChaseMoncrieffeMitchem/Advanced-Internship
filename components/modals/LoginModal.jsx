@@ -10,6 +10,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInAnonymously,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { auth, initFirebase } from "@/firebase";
 import { useAuth } from "@/contexts/authContext";
@@ -34,17 +36,21 @@ export default function LoginModal() {
   const app = initFirebase();
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  console.log(auth);
 
-  function guestLogin() {
-    signInAnonymously(auth).then(() => {
-      if (isSignedIn) return;
-      if (!isSignedIn) {
-        dispatch(setUser(auth.currentUser.email));
-        console.log(user);
-        // window.location = "/foryou";
+  async function guestLogin() {
+    try{
+      await setPersistence(auth, browserLocalPersistence); 
+      const email = "guest@email.com"
+      const password = "test123"
+      await signInWithEmailAndPassword(auth, email, password);
+      const person = auth.currentUser;
+      if (person) {
+        setUser({email: person.email})
+        window.location = "/foryou"
       }
-    });
+    } catch (error) {
+      alert(error)
+    }
   }
 
   async function googleSignIn() {
@@ -52,7 +58,6 @@ export default function LoginModal() {
     const user = result.user;
     if (user) {
       dispatch(setUser(auth.currentUser.email));
-      console.log(user);
       window.location = "/foryou";
     }
   }
@@ -63,10 +68,8 @@ export default function LoginModal() {
         const subscribe = onAuthStateChanged(auth, (currentUser) => {
           if (currentUser) {
             window.location = "/foryou";
-            // console.log("You're In");
             dispatch(closeLoginModal());
             dispatch(setUser(currentUser.email));
-            console.log(currentUser.email);
           }
         });
       })
@@ -107,14 +110,14 @@ export default function LoginModal() {
     <>
       <Modal
         open={isOpen}
-        onClose={() => dispatch(closeLoginModal())}
+        onClose={() => dispatch(closeLoginModal()) && setErrorMessage("")}
         className="flex justify-center items-center"
       >
         <div className="w-[90%] h-fit bg-white md:w-[560px] md:h-[600px] border border-transparent rounded-lg flex justify-center relative">
           <IoClose
             className="absolute top-1 right-1 cursor-pointer z-50"
             style={{ width: "30px", height: "30px" }}
-            onClick={() => dispatch(closeLoginModal())}
+            onClick={() => dispatch(closeLoginModal()) && setErrorMessage("")}
           />
           <div className="w-[90%] mt-16 flex flex-col">
             <div className="w-full z-50"></div>

@@ -60,7 +60,7 @@ export default function SignupModal() {
     <>
       <Modal
         open={isOpen}
-        onClose={() => dispatch(closeSignupModal())}
+        onClose={() => dispatch(closeSignupModal()) && setErrorMessage("")}
         className="flex justify-center items-center"
       >
         <div className="w-[90%] h-fit bg-white md:w-[560px] md:h-[600px] border border-transparent rounded-lg flex justify-center">
