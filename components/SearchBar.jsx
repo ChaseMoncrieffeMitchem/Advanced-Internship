@@ -62,7 +62,6 @@ export default function SearchBar() {
 
   function toggleSidebar() {
     dispatch(setSidebarToggle(!sidebarToggle))
-    console.log(sidebarToggle)
   }
 
   return (

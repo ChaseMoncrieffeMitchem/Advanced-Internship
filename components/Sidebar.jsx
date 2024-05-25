@@ -7,17 +7,19 @@ import { useSelector, useDispatch } from "react-redux";
 import LoginModal from "./modals/LoginModal";
 import SignupModal from "./modals/SignupModal";
 import { signOutUser } from "@/redux/userSlice";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
+import { RiFontSize } from "react-icons/ri";
 
 export default function Sidebar() {
-
-  const sidebarToggle = useSelector((state) => state.sidebar.sidebarToggle)
+  const [fontSizeElement, setFontSizeElement] = useState(null);
+  const [fontSizes, setFontSizes] = useState("font1");
+  const sidebarToggle = useSelector((state) => state.sidebar.sidebarToggle);
 
   const app = initFirebase();
   const auth = getAuth(app);
 
-  const router = useRouter()
-  const pathname = router?.pathname
+  const router = useRouter();
+  const pathname = router?.pathname;
 
   const user = useSelector((state) => state.user.email);
   const dispatch = useDispatch();
@@ -27,17 +29,62 @@ export default function Sidebar() {
     dispatch(signOutUser());
   };
 
+  function smallFontSize() {
+    removeFontSize();
+    const fontsize = document.querySelector(".audio__book--summary-text");
+    setFontSizes("font1");
+    fontsize?.classList.add("font1");
+    setFontSizeElement(fontsize);
+  }
+
+  function mediumFontSize() {
+    removeFontSize();
+    const fontsize = document.querySelector(".audio__book--summary-text");
+    setFontSizes("font2");
+    fontsize?.classList.add("font2");
+    setFontSizeElement(fontsize);
+  }
+
+  function largeFontSize() {
+    removeFontSize();
+    const fontsize = document.querySelector(".audio__book--summary-text");
+    setFontSizes("font3");
+    fontsize?.classList.add("font3");
+    setFontSizeElement(fontsize);
+  }
+
+  function xlFontSize() {
+    removeFontSize();
+    const fontSize = document.querySelector(".audio__book--summary-text");
+    setFontSizes("font4");
+    fontSize?.classList.add("font4");
+    setFontSizeElement(fontSize);
+  }
+
+  function removeFontSize() {
+    fontSizeElement?.classList.remove("font1");
+    fontSizeElement?.classList.remove("font2");
+    fontSizeElement?.classList.remove("font3");
+    fontSizeElement?.classList.remove("font4");
+  }
+
   return (
     <>
       <LoginModal />
       <SignupModal />
       <div className="sidebar__overlay--hidden sidebar__overlay"></div>
-      <div className={`sidebar ${sidebarToggle ? "sidebar__open" : "sidebar__hidden"}`}>
+      <div
+        className={`sidebar ${
+          sidebarToggle ? "sidebar__open" : "sidebar__hidden"
+        }`}
+      >
         <div className="sidebar__logo">
           <img src="https://summarist.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.1b1c490b.png&w=640&q=75"></img>
         </div>
         <div
-          className={`sidebar__wrapper ${pathname.startsWith("/player/") ? "sidebar__player--wrapper" : ""}`}
+          className={`sidebar__wrapper ${
+            pathname.startsWith("/player/") ? "sidebar__player--wrapper" : ""
+          }`}
         >
           <div className="sidebar__top">
             <Link href="/foryou" className="sidebar__link--wrapper">
@@ -116,6 +163,28 @@ export default function Sidebar() {
             </div>
           </div>
           <div className="sidebar__bottom">
+            <div className="sidebar__font-size--wrapper">
+              <div 
+              className={`sidebar__link--text sidebar__font--size-icon  ${fontSizes === "font1" ? "sidebar__font--size-icon--active" : ""}`}
+              onClick={() => smallFontSize()}>
+                <RiFontSize className="sidebar__font--size-icon-small"/>
+              </div>
+              <div 
+              className={`sidebar__link--text sidebar__font--size-icon  ${fontSizes === "font2" ? "sidebar__font--size-icon--active" : ""}`} 
+              onClick={() => mediumFontSize()}>
+                <RiFontSize className="sidebar__font--size-icon-medium"/>
+              </div>
+              <div 
+              className={`sidebar__link--text sidebar__font--size-icon  ${fontSizes === "font3" ? "sidebar__font--size-icon--active" : ""}`}
+              onClick={() => largeFontSize()}>
+                <RiFontSize className="sidebar__font--size-icon-large"/>
+              </div>
+              <div 
+              className={`sidebar__link--text sidebar__font--size-icon  ${fontSizes === "font4" ? "sidebar__font--size-icon--active" : ""}`}
+              onClick={() => xlFontSize()}>
+                <RiFontSize className="sidebar__font--size-icon-xl"/>
+              </div>
+            </div>
             <Link className="sidebar__link--wrapper" href="/settings">
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
