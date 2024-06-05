@@ -671,14 +671,11 @@ button:disabled {
 }
 
 .for-you__recommended--books {
-  /* display: flex;
-  justify-content: center; */
-  width: 100%;
-  /* display: flex;
+  display: flex;
   overflow-x: auto;
   gap: 16px;
   scroll-snap-type: mandatory;
-  scroll-snap-type: x; */
+  scroll-snap-type: x;
   margin-bottom: 32px;
 }
 
