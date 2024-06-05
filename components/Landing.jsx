@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import LoginModal from "./modals/LoginModal";
 import SignupModal from "./modals/SignupModal";
 import Logout from "./modals/Logout";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "@/redux/modalSlice";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase";
 
 export default function Landing() {
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+      const subscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          window.location = "/foryou"
+        }
+      });
+      return subscribe;
+  }, []);
   return (
     <>
       <section id="landing">
