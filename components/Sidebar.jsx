@@ -9,6 +9,7 @@ import SignupModal from "./modals/SignupModal";
 import { signOutUser } from "@/redux/userSlice";
 import { useRouter } from "next/router";
 import { RiFontSize } from "react-icons/ri";
+import { setSidebarToggle } from "@/redux/sidebarSlice";
 
 export default function Sidebar() {
   const [fontSizeElement, setFontSizeElement] = useState(null);
@@ -87,7 +88,7 @@ export default function Sidebar() {
           }`}
         >
           <div className="sidebar__top">
-            <Link href="/foryou" className="sidebar__link--wrapper">
+            <Link href="/foryou" className="sidebar__link--wrapper" onClick={() => dispatch(setSidebarToggle(false))}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <svg
@@ -103,26 +104,6 @@ export default function Sidebar() {
                 </svg>
               </div>
               <div className="sidebar__link--text">For You</div>
-            </Link>
-            <Link
-              href="/library"
-              className="sidebar__link--wrapper sidebar__link--not-allowed"
-            >
-              <div className="sidebar__link--line"></div>
-              <div className="sidebar__icon--wrapper">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 16 16"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"></path>
-                </svg>
-              </div>
-              <div className="sidebar__link--text">Library</div>
             </Link>
             <div className="sidebar__link--wrapper sidebar__link--not-allowed">
               <div className="sidebar__link--line"></div>
@@ -163,7 +144,9 @@ export default function Sidebar() {
             </div>
           </div>
           <div className="sidebar__bottom">
-            <div className="sidebar__font-size--wrapper">
+            <div className={`${
+            pathname.startsWith("/player/") ? "sidebar__font-size--wrapper" : "invisible"
+          }`}>
               <div 
               className={`sidebar__link--text sidebar__font--size-icon  ${fontSizes === "font1" ? "sidebar__font--size-icon--active" : ""}`}
               onClick={() => smallFontSize()}>
@@ -185,7 +168,7 @@ export default function Sidebar() {
                 <RiFontSize className="sidebar__font--size-icon-xl"/>
               </div>
             </div>
-            <Link className="sidebar__link--wrapper" href="/settings">
+            <Link className="sidebar__link--wrapper" href="/settings" onClick={() => dispatch(setSidebarToggle(false))}>
               <div className="sidebar__link--line"></div>
               <div className="sidebar__icon--wrapper">
                 <svg
@@ -249,7 +232,7 @@ export default function Sidebar() {
               </div>
               {user ? (
                 <button
-                  onClick={() => signOut()}
+                  onClick={() => (dispatch(setSidebarToggle(false)) && signOut())}
                   className="sidebar__link--text"
                 >
                   Logout
@@ -257,7 +240,7 @@ export default function Sidebar() {
               ) : (
                 <button
                   className="sidebar__link--text"
-                  onClick={() => dispatch(openLoginModal())}
+                  onClick={() => dispatch(openLoginModal()) && dispatch(setSidebarToggle(false))}
                 >
                   Login
                 </button>

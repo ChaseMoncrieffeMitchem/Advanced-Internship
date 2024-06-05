@@ -3,9 +3,6 @@ import Link from "next/link";
 import axios from "axios";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
 
 export default function SuggestedBooks({ suggestedBooks, loading }) {
   const [audioDurations, setAudioDurations] = useState({});
@@ -33,50 +30,11 @@ export default function SuggestedBooks({ suggestedBooks, loading }) {
     return "0:00";
   }
 
-  const settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1200,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 992,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 576,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 450,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
   return (
     <>
       <div className="for-you__title">Suggested Books</div>
       <div className="for-you__sub--title">Browse those books</div>
       <div className="for-you__recommended--books">
-        <Slider {...settings}>
           {loading
             ? new Array(5).fill(0).map((element, index) => (
                 <Stack spacing={1}>
@@ -157,7 +115,6 @@ export default function SuggestedBooks({ suggestedBooks, loading }) {
                   </div>
                 </Link>
               ))}
-        </Slider>
       </div>
     </>
   );
