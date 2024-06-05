@@ -1379,6 +1379,21 @@ button:disabled {
   }
 }
 
+@media (max-width: 450px) {
+  .selected__book--content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .selected__book--text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 @keyframes ldio-rpinwye8j0b {
   0% {
     transform: rotate(0deg);

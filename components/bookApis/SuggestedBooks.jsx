@@ -61,6 +61,13 @@ export default function SuggestedBooks({ suggestedBooks, loading }) {
           slidesToScroll: 2,
         },
       },
+      {
+        breakpoint: 450,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
     ],
   };
 
