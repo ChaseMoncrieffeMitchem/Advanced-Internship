@@ -29,7 +29,7 @@ export default function Landing() {
               <div className="landing__content">
                 <div className="landing__content__title">
                   Gain more knowledge <br className="remove--tablet" />
-                  in less time
+                  in no time!
                 </div>
                 <div className="landing__content__subtitle">
                   Great summaries for busy people,
