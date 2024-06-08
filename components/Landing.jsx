@@ -34,9 +34,9 @@ export default function Landing() {
                 <div className="landing__content__subtitle">
                   Great summaries for busy people,
                   <br className="remove--tablet" />
-                  individuals who barely have time to read,
+                  individuals who don’t like to read 
                   <br className="remove--tablet" />
-                  and even people who don’t like to read.
+                  and even people who barely have time to read.
                 </div>
                 <button
                   onClick={() => dispatch(openLoginModal())}
